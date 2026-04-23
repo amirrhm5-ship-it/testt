@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      background: linear-gradient(135deg, #0f2027, #2c5364, #6a11cb);
+      font-family: Arial;
+    }
+
+    .btn {
+      width: 220px;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 18px;
+      border: none;
+      font-size: 18px;
+      color: white;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      background: rgba(255,255,255,0.25);
+    }
+  </style>
+</head>
+
+<body>
+
+  <button class="btn" onclick="location.href='game1.html'">Game 1</button>
+  <button class="btn" onclick="location.href='game2.html'">Game 2</button>
+  <button class="btn" onclick="location.href='game3.html'">Game 3</button>
+
+</body>
+</html>

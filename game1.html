@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Flappy Bird Clone</title>
+  <!-- Оптимизация под мобильные устройства -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      background: #70c5ce;
+    }
+    #game {
+      position: relative;
+      width: 100vw;   /* ширина экрана телефона */
+      height: 100vh;  /* высота экрана телефона */
+      max-width: 400px;   /* ограничение для ПК */
+      max-height: 500px;
+      margin: 0 auto;
+      background: url("background.png") no-repeat center/cover;
+      overflow: hidden;
+      border: 2px solid #333;
+    }
+    #bird {
+      position: absolute;
+      width: 40px;
+      height: 30px;
+      background: url("bird.png") no-repeat center/cover;
+      top: 200px;
+      left: 50px;
+    }
+    .pipe {
+      position: absolute;
+      width: 60px;
+    }
+    .pipe.top {
+      background: url("pipe-top.png") no-repeat bottom/cover;
+      top: 0;
+    }
+    .pipe.bottom {
+      background: url("pipe-bottom.png") no-repeat top/cover;
+      bottom: 0;
+    }
+    #score {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 2px black;
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <div id="bird"></div>
+    <div id="score">0</div>
+  </div>
+
+  <script>
+    const game = document.getElementById('game');
+    const bird = document.getElementById('bird');
+    const scoreDisplay = document.getElementById('score');
+    let birdY = 200;
+    let gravity = 2;
+    let jump = -30;
+    let pipes = [];
+    let score = 0;
+
+    function updateBird() {
+      birdY += gravity;
+      bird.style.top = birdY + 'px';
+      if (birdY > game.clientHeight - bird.offsetHeight) {
+        endGame();
+      }
+    }
+
+    function endGame() {
+      alert("Игра окончена! Счёт: " + score);
+      document.location.reload();
+    }
+
+    // Управление: клавиатура, клик мышкой, тап пальцем
+    window.addEventListener('keydown', () => {
+      birdY += jump;
+    });
+    window.addEventListener('click', () => {
+      birdY += jump;
+    });
+    window.addEventListener('touchstart', () => {
+      birdY += jump;
+    });
+
+    function createPipe() {
+      let gap = 150;
+      let topHeight = Math.floor(Math.random() * 180) + 50;
+      let bottomHeight = game.clientHeight - topHeight - gap;
+
+      let pipeTop = document.createElement('div');
+      pipeTop.classList.add('pipe', 'top');
+      pipeTop.style.height = topHeight + 'px';
+      pipeTop.style.left = game.clientWidth + 'px';
+
+      let pipeBottom = document.createElement('div');
+      pipeBottom.classList.add('pipe', 'bottom');
+      pipeBottom.style.height = bottomHeight + 'px';
+      pipeBottom.style.left = game.clientWidth + 'px';
+      pipeBottom.style.bottom = '0px';
+
+      game.appendChild(pipeTop);
+      game.appendChild(pipeBottom);
+      pipes.push({top: pipeTop, bottom: pipeBottom, x: game.clientWidth});
+    }
+
+    function updatePipes() {
+      for (let i = 0; i < pipes.length; i++) {
+        pipes[i].x -= 2;
+        pipes[i].top.style.left = pipes[i].x + 'px';
+        pipes[i].bottom.style.left = pipes[i].x + 'px';
+
+        if (pipes[i].x < 80 && pipes[i].x > 20) {
+          if (birdY < pipes[i].top.offsetHeight ||
+              birdY + bird.offsetHeight > game.clientHeight - pipes[i].bottom.offsetHeight) {
+            endGame();
+          }
+        }
+
+        if (pipes[i].x === 20) {
+          score++;
+          scoreDisplay.textContent = score;
+        }
+      }
+    }
+
+    setInterval(updateBird, 30);
+    setInterval(updatePipes, 30);
+    setInterval(createPipe, 2500);
+  </script>
+</body>
+</html>
